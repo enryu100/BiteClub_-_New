@@ -44,16 +44,16 @@ void Camera::transformView(float deltaX, float deltaY, float deltaZ, float delta
 //something weird af need both for actual proper movement
 void Camera::moveForwardBack(float amountx, float amountz){
 	// This makes the movement occur only on the x and z axes, mimicking walking.
-	position.x += (forward.x * amountx * m_moveSpeed *viewMatrix.columns[2].x);
+	position.x += (float)(forward.x * amountx * m_moveSpeed *viewMatrix.columns[2].x);
 	//viewMatrix.columns[2].x;
 	//viewMatrix.columns[2].z;
-	position.z += (forward.z * amountz * m_moveSpeed*viewMatrix.columns[2].z);
+	position.z += (float)(forward.z * amountz * m_moveSpeed*viewMatrix.columns[2].z);
 }
 
 void Camera::moveLeftRight(float amountx, float amountz){
 	// This makes the movement occur only on the x and z axes, mimicking walking.
-	position.x += (right.x * amountx * m_moveSpeed*viewMatrix.columns[2].x);
-	position.z += (right.z * amountz * m_moveSpeed*viewMatrix.columns[2].z);
+	position.x += (float)(right.x * amountx * m_moveSpeed*viewMatrix.columns[2].x);
+	position.z += (float)(right.z * amountz * m_moveSpeed*viewMatrix.columns[2].z);
 }
 
 void Camera::moveUpDown(float amount){
@@ -69,16 +69,16 @@ void Camera::rotateY(float angle){
 	// THERE MAY BE SOMETHING WRONG IN HERE!
 	Vector3D newForward = forward, newRight = right;
 
-	angle *= m_rotateSpeed;
-	angle *= (PI/180.0f);
+	angle *= (float)m_rotateSpeed;
+	angle *= (float)(PI/180.0f);
 
-	forward.x = (cos(angle + (PI / 2)) * newForward.x) + (cos(angle) * newRight.x);
-	forward.y = (cos(angle + (PI / 2)) * newForward.y) + (cos(angle) * newRight.y);
-	forward.z = (cos(angle + (PI / 2)) * newForward.z) + (cos(angle) * newRight.z);
+	forward.x = (float)(cos(angle + (PI / 2)) * newForward.x) + (cos(angle) * newRight.x);
+	forward.y = (float)(cos(angle + (PI / 2)) * newForward.y) + (cos(angle) * newRight.y);
+	forward.z = (float)(cos(angle + (PI / 2)) * newForward.z) + (cos(angle) * newRight.z);
 
-	right.x = (cos(angle) * newForward.x) + (cos(angle - (PI / 2)) * newRight.x);
-	right.y = (cos(angle) * newForward.y) + (cos(angle - (PI / 2)) * newRight.y);
-	right.z = (cos(angle) * newForward.z) + (cos(angle - (PI / 2)) * newRight.z);
+	right.x = (float)((cos(angle) * newForward.x) + (cos(angle - (PI / 2)) * newRight.x));
+	right.y = (float)((cos(angle) * newForward.y) + (cos(angle - (PI / 2)) * newRight.y));
+	right.z = (float)((cos(angle) * newForward.z) + (cos(angle - (PI / 2)) * newRight.z));
 
 	forward = forward.normalise();
 	right = right.normalise();

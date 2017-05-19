@@ -62,15 +62,18 @@ void MainGame::processInput(){
 		//mouse change is being set really high when a key is pressed-1512 for 1?
 		//mouse change 2 is 2360
 		//pressing a ket sets mouseX and Y to 0?
-		float mousechange1 = 1024/2 - gameEvnt.mouseX;
-		float mousechange2 = 720/2 - gameEvnt.mouseY;
+
+		float mousechange1 = (float)(1024.0f/2.0f - gameEvnt.mouseX);
+		float mousechange2 = (float)(720.0f/2.0f - gameEvnt.mouseY);
+		//float mousechange1 = gameEvnt.mouseX - newEvent.mouseX;
+		//float mousechange2 =  gameEvnt.mouseY-newEvent.mouseY;
 
 		//old1 = temp1;
 		//old2 = temp2;
 		//Problem exists here, is to do with mousechange
 		if(gameEvnt.mouseX !=0){
-			temp1 = mouseSpeed * float( mousechange1);
-			temp2 = mouseSpeed * float(  mousechange2);
+			temp1 += mouseSpeed * float( mousechange1);
+			temp2 += mouseSpeed * float(  mousechange2);
 		}
 		 /*
 		 float change1 = (temp1-old1) ;
@@ -96,7 +99,7 @@ void MainGame::processInput(){
 		*/
 		// Perform action (button/key press)
 		if(newEvent.keyDown){
-			for(int index = 0; index < newEvent.keysPressed.size(); index++){
+			for(unsigned index = 0; index < newEvent.keysPressed.size(); index++){
 				std::cout << newEvent.keysPressed.at(index);
 				switch(newEvent.keysPressed.at(index)){
 				case 'w':
@@ -108,12 +111,16 @@ void MainGame::processInput(){
 					xChange = -1.0f;
 					break;
 				case 'a':
+					/*
 					xChange = -1.0f;
 					zChange = -1.0f;
+					*/
 					break;
 				case 'd':
+					/*
 					xChange = 1.0f;
 					zChange = 1.0f;
+					*/
 					break;
 				case 27:
 					exit(0);

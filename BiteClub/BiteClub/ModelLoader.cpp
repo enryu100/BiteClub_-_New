@@ -19,8 +19,8 @@ bool loader::loadObj(const char* path, vector<Vector3D> & outVertices, vector<Ve
 		return false;
 
 	if(scene->mNumMeshes > 0){
-		for(int i = 0; i < scene->mNumMeshes; i++){
-			for(int j = 0; j < scene->mMeshes[i]->mNumVertices; j++){
+		for(unsigned i = 0; i < scene->mNumMeshes; i++){
+			for(unsigned j = 0; j < scene->mMeshes[i]->mNumVertices; j++){
 				outVertices.push_back(Vector3D(scene->mMeshes[i]->mVertices[j].x, scene->mMeshes[i]->mVertices[j].y, scene->mMeshes[i]->mVertices[j].z));
 			}
 		}
@@ -29,7 +29,7 @@ bool loader::loadObj(const char* path, vector<Vector3D> & outVertices, vector<Ve
 	int texWidth, texHeight;
 
 	if(scene->mNumTextures > 0){
-		for(int i = 0; i < scene->mNumTextures; i++){
+		for(unsigned i = 0; i < scene->mNumTextures; i++){
 			texWidth = scene->mTextures[i]->mWidth;
 			if(scene->mTextures[i]->mHeight = 0){
 				texHeight = 1;
