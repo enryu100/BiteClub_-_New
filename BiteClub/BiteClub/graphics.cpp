@@ -17,7 +17,7 @@ GraphicsEngine::~GraphicsEngine(){
 void GraphicsEngine::init(vector<string> modelFiles){
 	SDL_GLContext context;
 
-	for(int index = 0; index < modelFiles.size(); index++){
+	for(unsigned index = 0; index < modelFiles.size(); index++){
 		Model newModel;
 		if(newModel.loadData(modelFiles[index])){
 			models.push_back(newModel);
@@ -30,6 +30,8 @@ void GraphicsEngine::init(vector<string> modelFiles){
 
 	//Create window. Hard-coded values will be changed when everything works.
 	window = SDL_CreateWindow("Test", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, screenWidth, screenHeight, SDL_WINDOW_OPENGL);
+	//SDL_SetRelativeMouseMode(SDL_TRUE);
+	SDL_ShowCursor(0);
 
 	if(window == nullptr)
 		exit(1); // A bit brash, but gets the job done
@@ -85,6 +87,10 @@ gameEvent GraphicsEngine::pollEvents(){
 			break;
 		}
 	}
+
+	SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
+		SDL_WarpMouseInWindow(window, screenWidth/2, screenHeight/2);
+	SDL_EventState(SDL_MOUSEMOTION, SDL_ENABLE);
 
 	return eventGame;
 }
@@ -142,12 +148,12 @@ void GraphicsEngine::drawModels(){
 	ModelData modelInfo;
 	types::Vector3D modelPos;
 
-	for(int index = 0; index < models.size(); index++){
+	for(unsigned index = 0; index < models.size(); index++){
 		modelInfo = models[index].getData();
 		modelPos = models[index].getModelPos();
 
 		glBegin(GL_TRIANGLE_STRIP);
-		for(int vertIndex = 0; vertIndex < modelInfo.vertices.size(); vertIndex++){
+		for(unsigned vertIndex = 0; vertIndex < modelInfo.vertices.size(); vertIndex++){
 			glVertex3f(modelInfo.vertices[vertIndex].x + modelPos.x, modelInfo.vertices[vertIndex].y + modelPos.y, modelInfo.vertices[vertIndex].z + modelPos.z); 
 		}
 		glEnd();
