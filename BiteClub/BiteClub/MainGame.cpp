@@ -47,14 +47,23 @@ void MainGame::initSystems(string initFile){
 	// Temp camera init. Do this from a file later.
 	player.setMoveSpeed(10.0);
 	player.setRotateSpeed(100.0);
-	temp1=0;
-	temp2 =0;
+	mouse1 = 0;
+	mouse2 = 0;
+}
+
+
+float MainGame::HeightMapTracking(){
+	float height;
+	types::Matrix4x4 temp = player.getViewMatrix();
+	height = gameTerrain.getHeight((int)temp.columns[3].x, (int)temp.columns[3].z);
+	return height;
 }
 
 void MainGame::processInput(){
 	events::gameEvent newEvent = graphicsEng.pollEvents();
 	float xChange = 0.0f, zChange = 0.0f, pitchChange = 0.0f, yawChange = 0.0f;
-	
+	float yChange = HeightMapTracking();
+	float move =0;
 	if(newEvent.hasEvents){
 		// Change camera view (mouse move)
 		//yawChange = newEvent.mouseX - gameEvnt.mouseX;
@@ -72,31 +81,10 @@ void MainGame::processInput(){
 		//old2 = temp2;
 		//Problem exists here, is to do with mousechange
 		if(gameEvnt.mouseX !=0){
-			temp1 += mouseSpeed * float( mousechange1);
-			temp2 += mouseSpeed * float(  mousechange2);
+			mouse1 += mouseSpeed * float( mousechange1);
+			mouse2 += mouseSpeed * float(  mousechange2);
 		}
-		 /*
-		 float change1 = (temp1-old1) ;
-		 float change2 = (temp2 - old2) ;
-		 */
-		/*
-		if(newEvent.mouseX > gameEvnt.mouseX)
-			yawChange = 1.0f;
-		else{
-			if(newEvent.mouseX < gameEvnt.mouseX)
-				yawChange = -1.0f;
-			else
-				yawChange = 0.0f;
-		}
-		if(newEvent.mouseY > gameEvnt.mouseY)
-			pitchChange = 1.0f;
-		else{
-			if(newEvent.mouseY < gameEvnt.mouseY)
-				pitchChange = -1.0f;
-			else
-				pitchChange = 0.0f;
-		}
-		*/
+
 		// Perform action (button/key press)
 		if(newEvent.keyDown){
 			for(unsigned index = 0; index < newEvent.keysPressed.size(); index++){
@@ -111,16 +99,10 @@ void MainGame::processInput(){
 					xChange = -1.0f;
 					break;
 				case 'a':
-					/*
-					xChange = -1.0f;
-					zChange = -1.0f;
-					*/
+					move = -1;
 					break;
 				case 'd':
-					/*
-					xChange = 1.0f;
-					zChange = 1.0f;
-					*/
+					move =1;
 					break;
 				case 27:
 					exit(0);
@@ -131,8 +113,8 @@ void MainGame::processInput(){
 			}
 			std::cout << std::endl;
 		}
-
-		player.transformView(xChange, 0.0f, zChange, temp1, temp2, 0.0f);
+		
+		player.transformView(xChange, yChange, zChange, mouse1, mouse2, move);
 
 		// Test code
 		types::Matrix4x4 temp = player.getViewMatrix();
@@ -149,6 +131,9 @@ void MainGame::processInput(){
 	}
 	//gameEvnt = newEvent;
 }
+
+
+
 
 void MainGame::gameLoop(){
 	types::Matrix4x4 view;

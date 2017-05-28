@@ -60,14 +60,14 @@ const vector<unsigned char> Terrain::getTerrainData(){
 }
 
 float Terrain::getHeight(int xPos, int zPos){
-	if(inBounds(xPos, zPos))
-		return((float)(getHeightColour(xPos, zPos)) * yScale);
+	if(inBounds(xPos/(int)xScale, zPos/(int)zScale))
+		return((float)(getHeightColour(xPos/(int)xScale, zPos/(int)zScale)) * yScale);
 
 	return 0;
 }
 
 unsigned char Terrain::getHeightColour(int xPos, int zPos){
-	if(inBounds(xPos, zPos))
+	if(inBounds(xPos/(int)xScale, zPos/(int)zScale))
 		return(terrainData->at((zPos * terrainSize) + xPos));
 
 	return 1;
@@ -90,7 +90,7 @@ float Terrain::getZScale(){
 }
 
 bool Terrain::inBounds(int xPos, int zPos){
-	if(xPos < terrainSize && zPos < terrainSize)
+	if(xPos < terrainSize && zPos < terrainSize && xPos > 0 && zPos > 0)
 		return true;
 
 	return false;

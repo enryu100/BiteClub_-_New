@@ -24,7 +24,7 @@ namespace terrain{
 		float getXScale();
 		float getYScale();
 		float getZScale();
-
+		float getHeight(int xPos, int zPos);
 	private:
 		std::unique_ptr<std::vector<unsigned char>> terrainData;
 		float xScale;
@@ -33,7 +33,7 @@ namespace terrain{
 		int terrainSize;
 
 		bool inBounds(int xPos, int zPos);
-		float getHeight(int xPos, int zPos);
+		
 		unsigned char getHeightColour(int xPos, int zPos);
 	};
 }
