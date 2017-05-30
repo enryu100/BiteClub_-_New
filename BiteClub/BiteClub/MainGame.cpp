@@ -19,7 +19,7 @@ void MainGame::run(string initFile){
 }
 
 void MainGame::initSystems(string initFile){
-	string terrainFile, fileString = "modelFile1";
+	string terrainFile, terrainTexFile, fileString = "modelFile";
 	int numModels;
 	std::vector<string> modelFiles;
 
@@ -27,21 +27,28 @@ void MainGame::initSystems(string initFile){
 	cout << "init" << endl;
 
 	terrainFile = fileLoader.Read_Variable_String("terrainFile");
-
 	cout << "terrain" << endl;
+
+	terrainTexFile = fileLoader.Read_Variable_String("terrainTexFile");
+	cout << "terrain texture" << endl;
 
 	numModels = fileLoader.Read_Variable_Int("numModels");
 	for(int index = 0; index < numModels; index++){
 		int modelNum = index + 1;
 
-		modelFiles.push_back(fileLoader.Read_Variable_String(fileString.c_str()));
+		modelFiles.push_back(fileLoader.Read_Variable_String((fileString + to_string(modelNum)).c_str()));
 	}
 
 	gameTerrain.loadHeightfield(terrainFile);
+	if(gameTerrain.loadTerrainTexture(terrainTexFile))
+		cout << "Texture success!" << endl;
+	else
+		cout << "FAILURE" << endl;
 	gameTerrain.setScale(10.0f, 0.5f, 10.0f);
 
 	graphicsEng.init(modelFiles);
 	graphicsEng.getHeightfieldData(gameTerrain.getTerrainData());
+	graphicsEng.getHeightfieldTexture(gameTerrain.getTerrainTexture());
 	graphicsEng.setScales(gameTerrain.getYScale(), gameTerrain.getXScale());
 
 	// Temp camera init. Do this from a file later.

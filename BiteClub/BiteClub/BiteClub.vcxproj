@@ -93,6 +93,8 @@
     <ClCompile Include="MainGame.cpp" />
     <ClCompile Include="ModelLoader.cpp" />
     <ClCompile Include="Terrain.cpp" />
+    <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="TextureLoader.cpp" />
     <ClCompile Include="Types.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -105,6 +107,8 @@
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="ModelLoader.h" />
     <ClInclude Include="Terrain.h" />
+    <ClInclude Include="Texture.h" />
+    <ClInclude Include="TextureLoader.h" />
     <ClInclude Include="Types.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

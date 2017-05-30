@@ -9,14 +9,11 @@
 */
 #pragma once
 
-#include <iostream>
-#include <string>
 #include <SDL/SDL.h>
-#include <GL/freeglut.h>
 #include <vector>
 #include "Events.h"
 #include "Types.h"
-#include "ModelLoader.h"
+#include "Texture.h"
 
 namespace graphics{
 
@@ -114,6 +111,7 @@ namespace graphics{
 		* first time, or when a new heightfield needs to be displayed.
 		*/
 		void getHeightfieldData(const std::vector<unsigned char> data);
+		void getHeightfieldTexture(const Texture data);
 
 	private:
 		/// The window context.
@@ -124,6 +122,7 @@ namespace graphics{
 		int screenHeight;
 		/// The heightfield data.
 		std::vector<unsigned char> heightfieldData;
+		Texture heightFieldTexture;
 		/// Scale data for heightfield
 		float scale, xzscale;
 		/// Boolean for whether a texture is being applied

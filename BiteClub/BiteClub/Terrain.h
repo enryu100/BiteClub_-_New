@@ -10,6 +10,7 @@
 #include <string>
 #include <memory>
 #include <vector>
+#include "Texture.h"
 
 namespace terrain{
 	class Terrain{
@@ -18,8 +19,10 @@ namespace terrain{
 		~Terrain();
 
 		bool loadHeightfield(std::string fileName);
+		bool loadTerrainTexture(std::string fileName);
 		void setScale(float x, float y, float z);
 		const std::vector<unsigned char> getTerrainData();
+		Texture getTerrainTexture();
 		int getTerrainSize();
 		float getXScale();
 		float getYScale();
@@ -27,6 +30,7 @@ namespace terrain{
 		float getHeight(int xPos, int zPos);
 	private:
 		std::unique_ptr<std::vector<unsigned char>> terrainData;
+		Texture terrainTexture;
 		float xScale;
 		float yScale;
 		float zScale;

@@ -11,9 +11,6 @@
 #pragma once
 
 #include <vector>
-#include <Assimp/Importer.hpp>
-#include <Assimp/scene.h>
-#include <Assimp/postprocess.h>
 #include "Types.h"
 
 namespace loader{
@@ -21,13 +18,11 @@ namespace loader{
 	* @brief Loads a .obj file and retrieves information pertaining to 3D models.
 	* @param path - The path of the file to be opened
 	* @param outVertices - A list of vertex co-ordinates for a 3D model
-	* @param outUVs - A list of UV co-ordinates for a 3D model
-	* @param outNormals - A list of normal vectors for a 3D model
 	* @return bool - true if the file loaded properly, false if not
 	*
 	* loadObj is a very simple (and error-prone) loader for models from .obj files. The file
-	* is opened and the data retrieved, then put into the lists of data passed by reference
+	* is opened and the data retrieved, then put into the list of data passed by reference
 	* from a model object.
 	*/
-	bool loadObj(const char* path, std::vector<types::Vector3D> & outVertices, std::vector<types::Vector2D> & outUVs, std::vector<types::Vector3D> & ourNormals);
+	bool loadObj(const char* path, std::vector<types::Vector3D> & outVertices);
 }
