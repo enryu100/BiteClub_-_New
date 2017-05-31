@@ -128,6 +128,7 @@ namespace graphics{
 		int screenHeight;
 		/// The heightfield data.
 		std::vector<unsigned char> heightfieldData;
+		/// The texture ID used for texturing the heightfield.
 		GLuint terrainTexID;
 		/// Scale data for heightfield
 		float scale, xzscale;
@@ -149,6 +150,14 @@ namespace graphics{
 		*/
 		void drawModels();
 
+		/**
+		* @brief Gets a texture from a file.
+		* @param fileName - The name of the file containing the texture
+		* @return GLuint - The ID of the texture
+		*
+		* getTexture loads a texture from a file (only .bmp at the moment) and returns its
+		* ID for use in the engine.
+		*/
 		GLuint getTexture(const char* fileName);
 	};
 
