@@ -1,4 +1,9 @@
 #include "graphics.h"
+#include <iostream>
+#include <string>
+#include <GL/glew.h>
+#include <GL/freeglut.h>
+#include "ModelLoader.h"
 
 using namespace std;
 using namespace graphics;
@@ -40,6 +45,10 @@ void GraphicsEngine::init(vector<string> modelFiles){
 
 	if(context == nullptr)
 		exit(1);
+
+	glewExperimental = true;
+	if(glewInit() != GLEW_OK)
+		return;
 
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
@@ -104,6 +113,32 @@ void GraphicsEngine::getHeightfieldData(const vector<unsigned char> data){
 	heightfieldData = data;
 }
 
+void GraphicsEngine::getHeightfieldTexture(const Texture data){
+	heightFieldTexture = data;
+
+	GLuint texIDGL;
+
+	glGenTextures(1, &texIDGL);
+
+	heightFieldTexture.texID = texIDGL;
+
+	glBindTexture(GL_TEXTURE_2D, heightFieldTexture.texID);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	if(heightFieldTexture.getChannels() > 3){
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, heightFieldTexture.getWidth(), heightFieldTexture.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, heightFieldTexture.getTexture());
+		cout << "RGBA" << endl;
+	}
+	else if(heightFieldTexture.getChannels() == 3){
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, heightFieldTexture.getWidth(), heightFieldTexture.getHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, heightFieldTexture.getTexture());
+		cout << "RGB" << endl;
+	}
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
 void GraphicsEngine::drawTerrain(){
 	// Square root because the actual size is all of the elements. This is, of course, assuming that the heightfield has the same dimensions for width and height.
 	int terrainSize = (int)sqrt((double)heightfieldData.size());
@@ -112,10 +147,10 @@ void GraphicsEngine::drawTerrain(){
 	float texLeft, texBottom, texTop;
 
 	//Stuff for texturing (incomplete?)
-	if(textureMap){
+	//if(textureMap){
 		glEnable(GL_TEXTURE_2D);
-		//glBindTexture(GL_TEXTURE_2D, texture.getID());
-	}
+		glBindTexture(GL_TEXTURE_2D, heightFieldTexture.texID);
+	//}
 
 	for(int zVal = 0; zVal < terrainSize; zVal++){
 		glBegin(GL_TRIANGLE_STRIP);
@@ -142,6 +177,8 @@ void GraphicsEngine::drawTerrain(){
 		}
 		glEnd();
 	}
+
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void GraphicsEngine::drawModels(){
@@ -161,5 +198,5 @@ void GraphicsEngine::drawModels(){
 }
 
 bool Model::loadData(string modelFile){
-	return loader::loadObj(modelFile.c_str(), data.vertices, data.uvs, data.normals);
+	return loader::loadObj(modelFile.c_str(), data.vertices);
 }

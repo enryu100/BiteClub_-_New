@@ -70,8 +70,8 @@ public:
 private:
 	float old1;
 	float old2;
-	float temp1;
-	float temp2;
+	float mouse1;
+	float mouse2;
 	float mouseSpeed;
 	/// The graphics engine.
 	graphics::GraphicsEngine graphicsEng;
@@ -85,7 +85,7 @@ private:
 	GameState currentState;
 	/// The loader and reader of the initialising file.
 	lua_Script fileLoader;
-
+	float HeightMapTracking();
 	/**
 	* @brief Initialises each component of the game engine.
 	* @param initFile - The file name of the initialising file
