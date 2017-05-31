@@ -66,7 +66,7 @@ class GameObject {
 		* @param x x-coordinate position of the object
 		* @param y y-coordinate position of the object
 		* @param z z-coordinate position of the object
-		* @param dir the direction the object is facing
+		* @param dir the direction the object is facing, range is from 0 along the z-axis, to 359.9 clockwise
 		*/
 		void setPosition(float x, float y, float z, float dir);
 		/**
