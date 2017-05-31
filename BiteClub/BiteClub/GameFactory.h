@@ -26,9 +26,20 @@ typedef float Vector4f[4];
 class GameFactory{
 	public:
 		//std::vector<GameObject> gameObjects; //don't know if this is needed... probably isn't
-
-		GameObject Create(Vector4f pos, std::string type, float hgt, float wdt, float dpt);
-		GameObject Create(float x, float y, float z, float dir, std::string type, float hgt, float wdt, float dpt);
+		/** 
+		*\fn Create
+		* Game Object Creator.
+		* A function for creating GameObjects.
+		* Receives unique defined type of 4 floats
+		* as a parameter
+		* @param pos the float position and facing direction of the object, stored in an array
+		* @param type the type of the object, NPC, enemy, etc.
+		* @param hgt the height of the object, with the origin in the front bottom left
+		* @param wdt the width of the object, with the origin in the front bottom left
+		* @param dpt the depth of the object, with the origin in the front bottom left
+		* @return the newly created object
+		**/
+		GameObject Create(std::string type);
 };
 
 #endif
