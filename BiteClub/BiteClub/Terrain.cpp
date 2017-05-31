@@ -49,10 +49,6 @@ bool Terrain::loadHeightfield(string fileName){
 	return true;
 }
 
-bool Terrain::loadTerrainTexture(string fileName){
-	return terrainTexture.loadData(fileName);
-}
-
 void Terrain::setScale(float x, float y, float z){
 	xScale = x;
 	yScale = y;
@@ -61,10 +57,6 @@ void Terrain::setScale(float x, float y, float z){
 
 const vector<unsigned char> Terrain::getTerrainData(){
 	return *terrainData;
-}
-
-Texture Terrain::getTerrainTexture(){
-	return terrainTexture;
 }
 
 float Terrain::getHeight(int xPos, int zPos){

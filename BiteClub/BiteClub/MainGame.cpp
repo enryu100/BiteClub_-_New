@@ -19,9 +19,9 @@ void MainGame::run(string initFile){
 }
 
 void MainGame::initSystems(string initFile){
-	string terrainFile, terrainTexFile, fileString = "modelFile";
-	int numModels;
-	std::vector<string> modelFiles;
+	string terrainFile, texFileString = "texFile", modelFileString = "modelFile";
+	int numModels = 0, numTextures = 0;
+	std::vector<string> modelFiles, texFiles;
 
 	fileLoader.Load(initFile.c_str());
 	cout << "init" << endl;
@@ -29,26 +29,25 @@ void MainGame::initSystems(string initFile){
 	terrainFile = fileLoader.Read_Variable_String("terrainFile");
 	cout << "terrain" << endl;
 
-	terrainTexFile = fileLoader.Read_Variable_String("terrainTexFile");
-	cout << "terrain texture" << endl;
-
 	numModels = fileLoader.Read_Variable_Int("numModels");
 	for(int index = 0; index < numModels; index++){
 		int modelNum = index + 1;
 
-		modelFiles.push_back(fileLoader.Read_Variable_String((fileString + to_string(modelNum)).c_str()));
+		modelFiles.push_back(fileLoader.Read_Variable_String((modelFileString + to_string(modelNum)).c_str()));
+	}
+
+	numTextures = fileLoader.Read_Variable_Int("numTextures");
+	for(int index = 0; index < numTextures; index++){
+		int texNum = index + 1;
+
+		texFiles.push_back(fileLoader.Read_Variable_String((texFileString + to_string(texNum)).c_str()));
 	}
 
 	gameTerrain.loadHeightfield(terrainFile);
-	if(gameTerrain.loadTerrainTexture(terrainTexFile))
-		cout << "Texture success!" << endl;
-	else
-		cout << "FAILURE" << endl;
 	gameTerrain.setScale(10.0f, 0.5f, 10.0f);
 
-	graphicsEng.init(modelFiles);
+	graphicsEng.init(modelFiles, texFiles);
 	graphicsEng.getHeightfieldData(gameTerrain.getTerrainData());
-	graphicsEng.getHeightfieldTexture(gameTerrain.getTerrainTexture());
 	graphicsEng.setScales(gameTerrain.getYScale(), gameTerrain.getXScale());
 
 	// Temp camera init. Do this from a file later.

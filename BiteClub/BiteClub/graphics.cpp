@@ -1,8 +1,6 @@
 #include "graphics.h"
 #include <iostream>
 #include <string>
-#include <GL/glew.h>
-#include <GL/freeglut.h>
 #include "ModelLoader.h"
 
 using namespace std;
@@ -19,10 +17,10 @@ GraphicsEngine::GraphicsEngine(){
 GraphicsEngine::~GraphicsEngine(){
 }
 
-void GraphicsEngine::init(vector<string> modelFiles){
+void GraphicsEngine::init(vector<string> modelFiles, vector<string> textureFiles){
 	SDL_GLContext context;
 
-	for(unsigned index = 0; index < modelFiles.size(); index++){
+	for(unsigned int index = 0; index < modelFiles.size(); index++){
 		Model newModel;
 		if(newModel.loadData(modelFiles[index])){
 			models.push_back(newModel);
@@ -49,6 +47,12 @@ void GraphicsEngine::init(vector<string> modelFiles){
 	glewExperimental = true;
 	if(glewInit() != GLEW_OK)
 		return;
+
+	glEnable(GL_TEXTURE_2D);
+
+	cout << terrainTexID << endl;
+	terrainTexID = getTexture(textureFiles[0].c_str());
+	cout << terrainTexID << endl;
 
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
@@ -113,31 +117,25 @@ void GraphicsEngine::getHeightfieldData(const vector<unsigned char> data){
 	heightfieldData = data;
 }
 
-void GraphicsEngine::getHeightfieldTexture(const Texture data){
-	heightFieldTexture = data;
-
-	GLuint texIDGL;
-
-	glGenTextures(1, &texIDGL);
-
-	heightFieldTexture.texID = texIDGL;
-
-	glBindTexture(GL_TEXTURE_2D, heightFieldTexture.texID);
-
+GLuint GraphicsEngine::getTexture(const char* fileName){
+	GLuint texID;
+	SDL_Surface* surface = SDL_LoadBMP(fileName);
+	if(surface != NULL)
+		cout << fileName << " has been loaded!" << endl;
+	
+	glGenTextures(1, &texID);
+	glBindTexture(GL_TEXTURE_2D, texID);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-	if(heightFieldTexture.getChannels() > 3){
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, heightFieldTexture.getWidth(), heightFieldTexture.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, heightFieldTexture.getTexture());
-		cout << "RGBA" << endl;
-	}
-	else if(heightFieldTexture.getChannels() == 3){
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, heightFieldTexture.getWidth(), heightFieldTexture.getHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, heightFieldTexture.getTexture());
-		cout << "RGB" << endl;
-	}
-
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, surface->w, surface->h, 0, GL_RGB, GL_UNSIGNED_BYTE, surface->pixels);
 	glBindTexture(GL_TEXTURE_2D, 0);
+
+	SDL_FreeSurface(surface);
+
+	return texID;
 }
+
+
 
 void GraphicsEngine::drawTerrain(){
 	// Square root because the actual size is all of the elements. This is, of course, assuming that the heightfield has the same dimensions for width and height.
@@ -146,11 +144,7 @@ void GraphicsEngine::drawTerrain(){
 	float height;
 	float texLeft, texBottom, texTop;
 
-	//Stuff for texturing (incomplete?)
-	//if(textureMap){
-		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, heightFieldTexture.texID);
-	//}
+	glBindTexture(GL_TEXTURE_2D, terrainTexID);
 
 	for(int zVal = 0; zVal < terrainSize; zVal++){
 		glBegin(GL_TRIANGLE_STRIP);
