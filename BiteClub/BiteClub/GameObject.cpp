@@ -38,8 +38,8 @@ void GameObject::setDimensionsZ(float dpt){
 	depth = dpt;
 }
 
-void GameObject::setTexture(std::string tex){
-	texture = tex;
+void GameObject::setModID(int tex){
+	modelID = tex;
 }
 
 void GameObject::setDimensions(float x, float y, float z){

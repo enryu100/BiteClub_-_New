@@ -23,7 +23,7 @@ class GameObject {
 		Vector4f Position; //4 floats. Contains x,y,z coords, and direction angle
 		std::string type; //Declares object type. NPC, enemy, boss, obstacle, etc.
 		//Rendering information goes here:
-		std::string texture; //Declares filepath of texture to be loaded on to the object.
+		int modelID; //Declares Identifier of modelID to be loaded on to the object.
 		float height, width, depth; //Dimensions of the object, with the Origin in the BOTTOM LEFT
 
 	public:
@@ -45,7 +45,7 @@ class GameObject {
 		float getWidth(){ return width; }
 		float getDepth(){ return depth; }
 		std::string getType(){ return type; }
-		std::string getTex(){ return texture; }
+		int getModID(){ return modelID; }
 
 		//SET METHODS
 		/**
@@ -112,13 +112,13 @@ class GameObject {
 		*/
 		void setType(std::string Type);
 		/**
-		* \fn setTexture
-		* Sets the texture of the object.
-		* A function for setting the texture
+		* \fn setModID
+		* Sets the modelID of the object.
+		* A function for setting the modelID
 		* to be applied to the object.
-		* @param tex the filepath of the texture to be applied, relative to the executable
+		* @param tex the modelID of the object
 		*/
-		void setTexture(std::string tex);
+		void setModID(int tex);
 };
 
 #endif
