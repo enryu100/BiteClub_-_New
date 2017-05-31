@@ -75,13 +75,19 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../dependencies/include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>../dependencies/lib;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>gl/opengl32.lib;gl/freeglut.lib;lua/lua5.3.lib;SDL/SDL2.lib;SDL/SDL2main.lib;Assimp/assimp-vc110-mt.lib;gl/glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>copy "$(SolutionDir)dependencies\DLLs\*" "$(OutDir)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
@@ -93,8 +99,6 @@
     <ClCompile Include="MainGame.cpp" />
     <ClCompile Include="ModelLoader.cpp" />
     <ClCompile Include="Terrain.cpp" />
-    <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="TextureLoader.cpp" />
     <ClCompile Include="Types.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -107,8 +111,6 @@
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="ModelLoader.h" />
     <ClInclude Include="Terrain.h" />
-    <ClInclude Include="Texture.h" />
-    <ClInclude Include="TextureLoader.h" />
     <ClInclude Include="Types.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

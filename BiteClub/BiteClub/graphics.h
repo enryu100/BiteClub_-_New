@@ -9,11 +9,12 @@
 */
 #pragma once
 
+#include <GL/glew.h>
+#include <GL/freeglut.h>
 #include <SDL/SDL.h>
 #include <vector>
 #include "Events.h"
 #include "Types.h"
-#include "Texture.h"
 
 namespace graphics{
 
@@ -45,6 +46,10 @@ namespace graphics{
 	* @version 04
 	* @date 26/4/2017 Alfred Malone, added Doxygen comments
 	*
+	* @author Alfred Malone
+	* @version 05
+	* @date 31/5/2017 Alfred Malone, added texture loading through SDL (currently only for heightmap)
+	*
 	* @todo Implement the models to allow for player and enemies to appear.
 	*/
 	class GraphicsEngine{
@@ -62,11 +67,13 @@ namespace graphics{
 		/**
 		* @brief Initialises the engine and view.
 		* @param modelFiles - a list of file names for the models
+		* @param textureFiles - a list of file names for the textures
 		*
-		* init initialises the engine's components - the window, OpenGL context, and models.
-		* Model data is loaded in with the file names provided as arguments.
+		* init initialises the engine's components - the window, OpenGL context, models,
+		* and textures. Model and texture data are loaded in with the file names provided
+		* as arguments.
 		*/
-		void init(std::vector<std::string> modelFiles);
+		void init(std::vector<std::string> modelFiles, std::vector<std::string> textureFiles);
 		/**
 		* @brief Displays the game world and its contents from a camera view.
 		* @param camX - The x-co-ordinate of the camera's position in the game space.
@@ -111,7 +118,6 @@ namespace graphics{
 		* first time, or when a new heightfield needs to be displayed.
 		*/
 		void getHeightfieldData(const std::vector<unsigned char> data);
-		void getHeightfieldTexture(const Texture data);
 
 	private:
 		/// The window context.
@@ -122,7 +128,8 @@ namespace graphics{
 		int screenHeight;
 		/// The heightfield data.
 		std::vector<unsigned char> heightfieldData;
-		Texture heightFieldTexture;
+		/// The texture ID used for texturing the heightfield.
+		GLuint terrainTexID;
 		/// Scale data for heightfield
 		float scale, xzscale;
 		/// Boolean for whether a texture is being applied
@@ -142,6 +149,16 @@ namespace graphics{
 		* drawModels uses the model data to draw all of the game's objects to the screen.
 		*/
 		void drawModels();
+
+		/**
+		* @brief Gets a texture from a file.
+		* @param fileName - The name of the file containing the texture
+		* @return GLuint - The ID of the texture
+		*
+		* getTexture loads a texture from a file (only .bmp at the moment) and returns its
+		* ID for use in the engine.
+		*/
+		GLuint getTexture(const char* fileName);
 	};
 
 	/**
