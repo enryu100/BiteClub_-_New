@@ -17,7 +17,7 @@
 #include "Types.h"
 
 namespace graphics{
-
+	// Forward declaration
 	class Model;
 
 	/**
@@ -159,6 +159,8 @@ namespace graphics{
 		* ID for use in the engine.
 		*/
 		GLuint getTexture(const char* fileName);
+
+		void setupModels();
 	};
 
 	/**
@@ -230,6 +232,9 @@ namespace graphics{
 		* setModelPos sets the model's position to the position supplied.
 		*/
 		void setModelPos(const types::Vector3D& newPos){modelPos = newPos;};
+
+		GLuint modelVID;
+		GLuint modelBID;
 
 	private:
 		/// The position of the model.

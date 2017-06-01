@@ -20,14 +20,6 @@ GraphicsEngine::~GraphicsEngine(){
 void GraphicsEngine::init(vector<string> modelFiles, vector<string> textureFiles){
 	SDL_GLContext context;
 
-	for(unsigned int index = 0; index < modelFiles.size(); index++){
-		Model newModel;
-		if(newModel.loadData(modelFiles[index])){
-			models.push_back(newModel);
-			cout << modelFiles[index] << " has been loaded!" << endl;
-		}
-	}
-
 	// Initialise SDL
 	SDL_Init(SDL_INIT_EVERYTHING);
 
@@ -47,6 +39,16 @@ void GraphicsEngine::init(vector<string> modelFiles, vector<string> textureFiles
 	glewExperimental = true;
 	if(glewInit() != GLEW_OK)
 		return;
+
+	for(unsigned int index = 0; index < modelFiles.size(); index++){
+		Model newModel;
+		if(newModel.loadData(modelFiles[index])){
+			models.push_back(newModel);
+			cout << modelFiles[index] << " has been loaded!" << endl;
+		}
+	}
+
+	setupModels();
 
 	glEnable(GL_TEXTURE_2D);
 
@@ -175,7 +177,19 @@ void GraphicsEngine::drawTerrain(){
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+void GraphicsEngine::setupModels(){
+	for(unsigned int index = 0; index < models.size(); index++){
+		glGenVertexArrays(1, &models[index].modelVID);
+		glBindVertexArray(models[index].modelVID);
+
+		glGenBuffers(1, &models[index].modelBID);
+		glBindBuffer(GL_ARRAY_BUFFER, models[index].modelBID);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(types::Vector3D) * models[index].getData().vertices.size(), &models[index].getData().vertices[0], GL_STATIC_DRAW);
+	}
+}
+
 void GraphicsEngine::drawModels(){
+	/*
 	ModelData modelInfo;
 	types::Vector3D modelPos;
 
@@ -189,6 +203,16 @@ void GraphicsEngine::drawModels(){
 		}
 		glEnd();
 	}
+	*/
+	
+	for(unsigned int index = 0; index < models.size(); index++){
+		glEnableVertexAttribArray(0);
+		glBindBuffer(GL_ARRAY_BUFFER, models[index].modelBID);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(types::Vector3D), (void*)0);
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, models[index].getData().vertices.size());
+		glDisableVertexAttribArray(0);
+	}
+	
 }
 
 bool Model::loadData(string modelFile){
