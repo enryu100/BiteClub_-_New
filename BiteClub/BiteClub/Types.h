@@ -141,6 +141,39 @@ namespace types{
 			return (sqrt(x*x + y*y + z*z));
 		}
 
+		 Vector3D max(Vector3D & r){
+		  Vector3D result;
+		  if(r.x > this->x){
+			  result.x = r.x;
+		  }else{
+			  result.x = this->x;
+		  }
+		  
+		  if(r.y > this->y){
+			  
+			  result.y = r.y; 
+		  }else{
+			  result.y = this->y;
+		  }
+
+		  if(r.z > this->z){
+			  result.z = r.z;
+		  }else{
+			  result.z = this->z;
+		  }
+		  return result;
+		 }
+
+		 float max(){
+			 if(this->x>this->y && this->x > this->y){
+				 return this->x;
+			 }else if(this->y>this->x && this->y > this->z){
+				 return this->y;
+			 }else{
+				 return this->z;
+			 }
+
+		 }
 		/**
 		* @brief Gets the normalised version of the vector.
 		* @return Vector3D - The normalised vector
