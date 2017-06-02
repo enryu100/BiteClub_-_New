@@ -14,7 +14,9 @@
 #include "lua_Script.h"
 #include <iostream>
 #include <vector>
-
+#include "movement.h"
+#include "waypoint.h"
+#include "BoundBox.h"
 /// An enumeration to make the game state transitions easier.
 enum class GameState {PLAY, EXIT};
 
@@ -85,7 +87,23 @@ private:
 	GameState currentState;
 	/// The loader and reader of the initialising file.
 	lua_Script fileLoader;
+	/**
+	* @brief Finds the height of the player in the heightmap
+	* @param void
+	* @return height - float
+	*
+	* initSystems sets each component of the game engine (graphics engine, terrain, camera)
+	* to an initial state. These states are provided by a values from a file.
+	*/
 	float HeightMapTracking();
+	///Players maximum edge of the player's bounding box
+	types::Vector3D playerMax;
+	///Players minimum edge of the player's bounding box
+	types::Vector3D playerMin;
+	///Contains the AABB for the player
+	BoundBox playerBox;
+	///countains the AABB for stuff in the world
+	std::vector<BoundBox> AABB;
 	/**
 	* @brief Initialises each component of the game engine.
 	* @param initFile - The file name of the initialising file

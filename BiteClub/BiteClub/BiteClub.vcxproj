@@ -90,28 +90,35 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BoundBox.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="GameFactory.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="graphics.cpp" />
+    <ClCompile Include="Intersection.cpp" />
     <ClCompile Include="lua_Script.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainGame.cpp" />
     <ClCompile Include="ModelLoader.cpp" />
+    <ClCompile Include="movement.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Types.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BoundBox.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="events.h" />
     <ClInclude Include="GameFactory.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="graphics.h" />
+    <ClInclude Include="Intersection.h" />
     <ClInclude Include="lua_Script.h" />
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="ModelLoader.h" />
+    <ClInclude Include="movement.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="Types.h" />
+    <ClInclude Include="waypoint.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

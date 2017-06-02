@@ -1,12 +1,13 @@
 #include "Camera.h"
 #include <math.h>
+#include <iostream>
 
 using namespace types;
 
 Camera::Camera(){
 	m_rotateSpeed = 0.0f;
 	m_moveSpeed = 0.0f;
-	position = Vector3D(0.0f, 0.0f, 0.0f);
+	position = Vector3D(250.0f, 0.0f, 250.0f);
 	right = Vector3D(1.0f, 0.0f, 0.0f);
 	up = Vector3D(0.0f, 1.0f, 0.0f);
 	forward = Vector3D(0.0f, 0.0f, 1.0f);
@@ -36,6 +37,7 @@ void Camera::transformView(float deltaX, float deltaY, float deltaZ, float Mouse
     cos(verticalAngle) * cos(horizontalAngle), 0.0f
 );
 	viewMatrix.columns[3] = Vector4D(position.x, position.y, position.z, 1);
+	//std::cout << m_moveSpeed << std::endl;
 }
 
 //walking should be dependant on where the camera is looking, currently is just a generic back and forth 

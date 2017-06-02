@@ -1,6 +1,4 @@
 #include "MainGame.h"
-//Known Bugs: Keyboard input messes up the lookat position, this is due to the get state getting any input, so pressinga  button sets the camera back to like whatever I set the default as
-//Need to change how input works in regards to mouse movement
 using namespace graphics;
 using namespace terrain;
 
@@ -19,10 +17,13 @@ void MainGame::run(string initFile){
 }
 
 void MainGame::initSystems(string initFile){
+
+
 	string terrainFile, texFileString = "texFile", modelFileString = "modelFile";
 	int numModels = 0, numTextures = 0;
 	std::vector<string> modelFiles, texFiles;
-
+	std::vector<BoundBox> boundingBoxes;
+	
 	fileLoader.Load(initFile.c_str());
 	cout << "init" << endl;
 
@@ -49,12 +50,34 @@ void MainGame::initSystems(string initFile){
 	graphicsEng.init(modelFiles, texFiles);
 	graphicsEng.getHeightfieldData(gameTerrain.getTerrainData());
 	graphicsEng.setScales(gameTerrain.getYScale(), gameTerrain.getXScale());
+	
+	playerMin.x = player.getViewMatrix().columns[3].x -10;
+	playerMin.y = player.getViewMatrix().columns[3].y -10;
+	playerMin.z = player.getViewMatrix().columns[3].z -10;
+
+	playerMax.x = player.getViewMatrix().columns[3].x +10;
+	playerMax.y = player.getViewMatrix().columns[3].y +10;
+	playerMax.z = player.getViewMatrix().columns[3].z +10;
+
+	playerBox.setMax_Extents(playerMax);
+	playerBox.setMin_Extents(playerMin);
 
 	// Temp camera init. Do this from a file later.
 	player.setMoveSpeed(10.0);
 	player.setRotateSpeed(100.0);
 	mouse1 = 0;
 	mouse2 = 0;
+	/*
+	AABB.push_back(BoundBox(Vector3D(-20, -10, -20), Vector3D((gameTerrain.getTerrainSize() * gameTerrain.getXScale()) + 20, 100, 0)));
+	AABB.push_back(BoundBox(Vector3D(-20, -10, -20), Vector3D(0, 100, (gameTerrain.getTerrainSize() * gameTerrain.getZScale()) + 20)));
+	AABB.push_back(BoundBox(Vector3D((gameTerrain.getTerrainSize() * gameTerrain.getXScale()), -10, -20), Vector3D((gameTerrain.getTerrainSize() * gameTerrain.getXScale()) + 20, 100, (gameTerrain.getTerrainSize() * gameTerrain.getZScale()))));
+	AABB.push_back(BoundBox(Vector3D(-20, -10, (gameTerrain.getTerrainSize() * gameTerrain.getZScale())), Vector3D((gameTerrain.getTerrainSize() * gameTerrain.getXScale()) + 20, 100, (gameTerrain.getTerrainSize() * gameTerrain.getZScale()) + 20)));
+*/
+	AABB.push_back(BoundBox(Vector3D(-20, -10, -20), Vector3D(3, 3, 3)));
+	AABB.push_back(BoundBox(Vector3D(-20, -10, -20), Vector3D(0, 100, 20)));
+	AABB.push_back(BoundBox(Vector3D((gameTerrain.getTerrainSize() * gameTerrain.getXScale()), -10, -20), Vector3D((gameTerrain.getTerrainSize() * gameTerrain.getXScale()) + 20, 100, (gameTerrain.getTerrainSize() * gameTerrain.getZScale()))));
+	AABB.push_back(BoundBox(Vector3D(-20, -10, (gameTerrain.getTerrainSize() * gameTerrain.getZScale())), Vector3D((gameTerrain.getTerrainSize() * gameTerrain.getXScale()) + 20, 100, (gameTerrain.getTerrainSize() * gameTerrain.getZScale()) + 20)));
+	
 }
 
 
@@ -70,13 +93,23 @@ void MainGame::processInput(){
 	float xChange = 0.0f, zChange = 0.0f, pitchChange = 0.0f, yawChange = 0.0f;
 	float yChange = HeightMapTracking();
 	float move =0;
+
+	player.setMoveSpeed(10.0);
+	//min and max, xyz
+	
+	for(unsigned int i =0; i<AABB.size();i++){
+		
+		if(playerBox.IntersectAABB(AABB[i]).GetDoesInteract()){
+			player.setMoveSpeed(0.0);
+		}
+	}
+	
+	playerBox.setMax_Extents(playerMax);
+	playerBox.setMin_Extents(playerMin);
+
 	if(newEvent.hasEvents){
 		// Change camera view (mouse move)
-		//yawChange = newEvent.mouseX - gameEvnt.mouseX;
-		//pitchChange = newEvent.mouseY - gameEvnt.mouseY;
-		//mouse change is being set really high when a key is pressed-1512 for 1?
-		//mouse change 2 is 2360
-		//pressing a ket sets mouseX and Y to 0?
+		//pressing a key sets mouseX and Y to 0
 
 		float mousechange1 = (float)(1024.0f/2.0f - gameEvnt.mouseX);
 		float mousechange2 = (float)(720.0f/2.0f - gameEvnt.mouseY);
@@ -94,7 +127,7 @@ void MainGame::processInput(){
 		// Perform action (button/key press)
 		if(newEvent.keyDown){
 			for(unsigned index = 0; index < newEvent.keysPressed.size(); index++){
-				std::cout << newEvent.keysPressed.at(index);
+				//std::cout << newEvent.keysPressed.at(index);
 				switch(newEvent.keysPressed.at(index)){
 				case 'w':
 					zChange = 1.0f;
@@ -117,19 +150,23 @@ void MainGame::processInput(){
 					break;
 				}
 			}
-			std::cout << std::endl;
+			//std::cout << std::endl;
 		}
+
+
 		
 		player.transformView(xChange, yChange, zChange, mouse1, mouse2, move);
-
+		
 		// Test code
 		types::Matrix4x4 temp = player.getViewMatrix();
+		
 		std::cout << "Look-at point: " << temp.columns[2].x << ", " << temp.columns[2].y << ", " << temp.columns[2].z << std::endl
 				  << "Right: " << temp.columns[0].x << ", " << temp.columns[0].y << ", " << temp.columns[0].z << std::endl
 				  << "Position: " << temp.columns[3].x << ", " << temp.columns[3].y << ", " << temp.columns[3].z << std::endl
 				  << "mouse X" << gameEvnt.mouseX<<std::endl
 				  << "mouse Y" << gameEvnt.mouseY<<std::endl;
-
+				  
+				  
 		if(newEvent.hasQuit)
 			currentState = GameState::EXIT;
 

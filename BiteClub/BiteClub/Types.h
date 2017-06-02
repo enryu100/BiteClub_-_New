@@ -100,6 +100,11 @@ namespace types{
 	* @version 02
 	* @date 24/4/2017 Alfred Malone, added extra functions for calculations
 	*
+	* @author Ben Porter
+	* @version 03
+	* @date 1/06/2017 Ben Porter, added max() and max(Vector3D)
+	* @bug max doesn't seem to work as intended
+	*
 	* @bug This one is also quite simple, so no bugs.
 	*/
 	struct Vector3D{
@@ -140,7 +145,49 @@ namespace types{
 		float length(){
 			return (sqrt(x*x + y*y + z*z));
 		}
+		
+		/**
+		* @brief Finds and returns the greatest value of each x, y, z for 2 vector3D
+		* @return Vector3D - contains greatest values of each point in the vector
+		* @param r - &Vector3D
+		*/
+		 Vector3D max(Vector3D & r){
+		  Vector3D result;
+		  if(r.x > this->x){
+			  result.x = r.x;
+		  }else{
+			  result.x = this->x;
+		  }
+		  
+		  if(r.y > this->y){
+			  
+			  result.y = r.y; 
+		  }else{
+			  result.y = this->y;
+		  }
 
+		  if(r.z > this->z){
+			  result.z = r.z;
+		  }else{
+			  result.z = this->z;
+		  }
+		  return result;
+		 }
+
+		 /**
+		* @brief Finds and returns the greatest value in the vector
+		* @return float - biggest value in the vector
+		*/
+		 float max(){
+			 if(this->x>this->y && this->x > this->z){
+				 return this->x;
+			 }else if(this->y>this->x && this->y > this->z){
+				 return this->y;
+			 }else if(this->z>this->x && this->z > this->y){
+				 return this->z;
+			 }
+
+		 }
 		/**
 		* @brief Gets the normalised version of the vector.
 		* @return Vector3D - The normalised vector

@@ -22,6 +22,7 @@ extern "C"{
 	#include "Lua\lualib.h"
 	#include "Lua\lauxlib.h"
 }
+//#include "Lua\luabind\luabind.hpp"
 #include <string>
 using namespace std;
 class lua_Script
