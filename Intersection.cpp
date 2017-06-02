@@ -1,6 +1,5 @@
 #include "Intersection.h"
 
-
 Intersection::Intersection(bool intersect, float dist){
 	doesIntersect = intersect;
 	distance = dist;

@@ -4,7 +4,6 @@ BoundBox::BoundBox(){
 
 }
 
-
 BoundBox::BoundBox(types::Vector3D min, types::Vector3D max){
 	min_extents = min;
 	max_extents = max;
